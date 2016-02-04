@@ -1,69 +1,56 @@
 'use strict';
 
 class BinaryTree {
-	constructor() {
-		this.root = null;
-	}
+    constructor() {
+        this.root = null;
+    }
 
-	insert(data){
-		var currentNode = new Node(data);
-		if (!this.root) {
-			this.root = currentNode;
-		} else {
-			var addNode = function (node) {
-				if (currentNode.data > node.data) {
-					if (!node.right) {
-						node.right = currentNode;
-						return;
-					} else addNode(node.right);
-				} else if (currentNode.data < node.data) {
-					if (!node.left) {
-						node.left = currentNode;
-						return;
-					} else addNode(node.left);
-				}
-			};
+    insert(data){
+        var currentNode = new Node(data);
+        if (!this.root) {
+            this.root = currentNode;
+        } else {
+            var addNode = function (node) {
+                if (currentNode.data > node.data) {
+                    if (!node.right) {
+                        node.right = currentNode;
+                    } else addNode(node.right);
+                }
+                if (currentNode.data < node.data) {
+                    if (!node.left) {
+                        node.left = currentNode;
+                    } else addNode(node.left);
+                }
+            };
             addNode(this.root);
-		}
-	}
+        }
+    }
 
-	contains(data) {
-		var searchNode = function(node) {
-			if (!node) return false;
-			if (data === node.data) {
-				return true;
-			} else if (data > node.data) {
-				return searchNode(node.right);
-			} else if (data < node.data) {
-				return searchNode(node.left);
-			}
-		};
-		return(searchNode(this.root));
-	}
+    contains(data) {
+        var searchNode = function(node) {
+            if (!node) return false;
+            if (data === node.data) return true;
+            if (data > node.data) return searchNode(node.right);
+            if (data < node.data) return searchNode(node.left);
+        };
+        return(searchNode(this.root));
+    }
 
     remove(data){
-        var temp ;
         if(this.contains(data)) {
             if(this.root.data === data){
                 this.root = null;
                 return;
             }
-            var getNodeSize = function (node) {
-                if (!node) return 0;
-                return node.count;
-            };
-            var getMinNode = function (node) {
+            var getMin = function (node) {
                 if (!node.left) return node;
-                return getMinNode(node.left);
+                return getMin(node.left);
             };
-
-            var deleteMinNode = function (node) {
+            var deleteMin = function (node) {
                 if (node.left == null) return node.right;
-                node.left = deleteMinNode(node.left);
-                node.count = 1 + getNodeSize(node.left) + getNodeSize(node.right);
+                node.left = deleteMin(node.left);
                 return node;
             };
-
             var deleteNode = function (node, data) {
                 if (!node) return null;
                 if (node.data > data) node.left = deleteNode(node.left, data);
@@ -71,9 +58,9 @@ class BinaryTree {
                 else {
                     if (!node.right) return node.left;
                     if (!node.left) return node.right;
-                    temp = node;
-                    node = getMinNode(temp.right);
-                    node.right = deleteMinNode(temp.right);
+                    var temp = node;
+                    node = getMin(temp.right);
+                    node.right = deleteMin(temp.right);
                     node.left = temp.left;
                 }
                 return node;
@@ -87,7 +74,7 @@ class BinaryTree {
             countLeft = 0,
             countRight = 0;
 
-         var countSize = function(node) {
+        var countSize = function(node) {
             if (!node) {return null}
             if(node.left) {
                 countLeft++;
@@ -98,17 +85,15 @@ class BinaryTree {
                 countSize(node.right);
             }
             count = 1;
-            count = count + countLeft + countRight;
+            count += countLeft + countRight;
         };
         countSize(this.root);
-        //console.log(count);
         return count;
     }
 
-	isEmpty() {
+    isEmpty() {
         if(this.root === null){
             return true;
         }else return false;
-   	}
+    }
 }
-
