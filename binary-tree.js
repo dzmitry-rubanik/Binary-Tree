@@ -12,14 +12,10 @@ class BinaryTree {
         } else {
             var addNode = function (node) {
                 if (currentNode.data > node.data) {
-                    if (!node.right) {
-                        node.right = currentNode;
-                    } else addNode(node.right);
+                    !node.right ? node.right = currentNode : addNode(node.right);
                 }
                 if (currentNode.data < node.data) {
-                    if (!node.left) {
-                        node.left = currentNode;
-                    } else addNode(node.left);
+                    !node.left ? node.left = currentNode : addNode(node.left);
                 }
             };
             addNode(this.root);
@@ -92,8 +88,6 @@ class BinaryTree {
     }
 
     isEmpty() {
-        if(this.root === null){
-            return true;
-        }else return false;
+        return this.root === null ? true : false;
     }
 }
